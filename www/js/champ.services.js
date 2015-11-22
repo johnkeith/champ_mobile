@@ -12,6 +12,8 @@ services.factory('FitbitAuthService', ['$http', 'LocalStorage',
 		// 	}
 		// }
 
+		var baseAuthUri = 'http://localhost:9393/api/v1/fitbit/auth';
+
 		var service = {};
 
 		// service.authenticate = function(){
@@ -25,7 +27,7 @@ services.factory('FitbitAuthService', ['$http', 'LocalStorage',
 		// };
 
 		service.auth_uri = function(url_params){
-			return 'http://localhost:9393/api/v1/fitbit/auth' + url_params;
+			return baseAuthUri + url_params;
 		}
 
 		return service;
