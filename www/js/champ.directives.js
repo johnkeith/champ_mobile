@@ -21,7 +21,7 @@ directives.directive('fitbitAuthButton', ['FitbitAuthService',
 			link: function(scope, element){
 				element.bind('click', function(){
 					// have to encode the hashbang with a %23
-					window.open(FitbitAuthService.auth_uri('?state=http://localhost:8100/%23/authenticated'), '_system');
+					window.open(FitbitAuthService.firstStepUri(), '_system');
 				});
 			}
 		}
