@@ -8,22 +8,18 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage',
 			return base + '?code=' + code + '&state=' + callback;
 		}
 
-		var baseAuthUri = 'http://localhost:9393/api/v1/fitbit/auth';
-		var firstStepCallbackUri = 'http://localhost:8100/%23/authenticated'
-		var clientSecret = 'V2UgYXJlIGdvaW5nIHRvIGhhdmUgYSBiYWJ5'
-
-		var buildSecondStepRequest = function(code){
+		function buildSecondStepRequest(code){
 			return {
 				method: 'POST',
 				url: buildSecondStepUri(baseAuthUri, code, firstStepCallbackUri)
 			}
 		}
 
-		var service = {};
+		var baseAuthUri = 'http://localhost:9393/api/v1/fitbit/auth';
+		var firstStepCallbackUri = 'http://localhost:8100/%23/authenticated'
+		var clientSecret = 'V2UgYXJlIGdvaW5nIHRvIGhhdmUgYSBiYWJ5'
 
-		service.auth_uri = function(url_params){
-			return baseAuthUri + url_params;
-		}
+		var service = {};
 
 		service.firstStepUri = function(){
 			return baseAuthUri + '?state=' + firstStepCallbackUri;
@@ -35,12 +31,9 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage',
 			var req = buildSecondStepRequest(code);
 
 			$http(req).then(function success(response){
-				// LocalStorage.set('auth', response.data)
-				console.log(response);
+				LocalStorage.setObject('FitbitUser', response.data)
 				deferred.resolve(response.data);
 			}, function error(response){
-				console.log('something happend!');
-				console.log(response);
 				deferred.reject(response.statusText || 'Error!!!');
 			});
 
@@ -50,21 +43,3 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage',
 		return service;
 	}
 ]);
-
-    // var deferred = $q.defer();
-
-    // var req = {
-    //   method: 'GET',
-    //   url: '/api/v1/loans/' + loanId
-    // };
-
-    // $http(req).then(
-    //   function complete(result) {
-    //     deferred.resolve(result.data.data.attributes);
-    //   },
-    //   function error(err) {
-    //     deferred.reject(err.statusText || 'Error retrieving loan');
-    //   }
-    // );
-
-    // return deferred.promise;
