@@ -35,6 +35,7 @@ angular.module('champ', [
               var savedUser = LocalStorage.get('FitbitUser');
 
               if(savedUser){
+                return FitbitAuthService.refreshOrReturnUser(savedUser);
                 return savedUser;
               } else if($stateParams.code){
                 return FitbitAuthService.secondStepRequest($stateParams.code);
