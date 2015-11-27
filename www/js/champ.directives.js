@@ -26,3 +26,18 @@ directives.directive('fitbitAuthButton', ['FitbitAuthService',
 		}
 	}
 ]);
+
+directives.directive('statsButton', ['FitbitAuthService', 'FitbitDataService',
+	function(FitbitAuthService, FitbitDataService){
+		return {
+			restrict: 'E',
+			template: '<button type="button">Get Lifetime Stats</button>',
+			link: function(scope, element){
+				element.bind('click', function(){
+					var user = FitbitAuthService.getUser();
+					FitbitDataService.getLifetimeStats(user.user_id, user.access_token);
+				});
+			}
+		}
+	}
+]);
