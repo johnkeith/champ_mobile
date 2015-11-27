@@ -20,7 +20,7 @@ directives.directive('fitbitAuthButton', ['FitbitAuthService',
 			template: '<button type="button">Sign Up with Fitbit</button>',
 			link: function(scope, element){
 				element.bind('click', function(){
-					window.open(FitbitAuthService.firstStepUri(), '_system');
+					FitbitAuthService.openFirstStepUriInBrowser();
 				});
 			}
 		}

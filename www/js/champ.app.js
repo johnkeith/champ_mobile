@@ -30,15 +30,25 @@ angular.module('champ', [
         url: "/authenticated?code",
         templateUrl: 'templates/authenticated.html',
         resolve: {
-          'User' : ['$state', '$stateParams', 'FitbitAuthService', 'LocalStorage',
-            function($state, $stateParams, FitbitAuthService, LocalStorage){
-              var savedUser = LocalStorage.get('FitbitUser');
+          'LifetimeStats' : ['FitbitDataService', 'LocalStorage',
+            function(FitbitDataService, LocalStorage){
+              var savedUser = LocalStorage.getObject('FitbitUser');
 
-              if(savedUser){
-                // return FitbitAuthService.refreshOrReturnUser(savedUser);
-                return savedUser;
-              } else if($stateParams.code){
+              return FitbitDataService.getLifetimeStats(savedUser.user_id, savedUser.access_token);
+            }
+          ],
+          'User' : ['$state', '$stateParams', 'FitbitAuthService', 'LocalStorage', 'LifetimeStats',
+            function($state, $stateParams, FitbitAuthService, LocalStorage, LifetimeStats){
+              var savedUser = LocalStorage.getObject('FitbitUser');
+
+              if($stateParams.code){
                 return FitbitAuthService.secondStepRequest($stateParams.code);
+              } else if(LifetimeStats.lifetime){
+                return savedUser;
+              } else if(LifetimeStats.success == false && LifetimeStats.errors[0].errorType == 'invalid_grant'){
+                return FitbitAuthService.refreshTokenRequest(savedUser.refresh_token)
+              } else if(LifetimeStats.success == false && LifetimeStats.errors[0].errorType == 'invalid_token'){
+                FitbitAuthService.openFirstStepUriInBrowser();
               } else {
                 return null;
               }

@@ -25,7 +25,7 @@ services.factory('FitbitDataService', ['$http', '$q',
 			var req = userLifetimeStatsRequest(userId, accessToken);
 
 			$http(req).then(function success(response){
-				deferred.resolve(response.data);
+				deferred.resolve(response.data.data);
 			}, function error(response){
 				deferred.reject(response.statusText || 'Error!!!');
 			});
@@ -57,7 +57,7 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 		function buildAuthRefreshTokenRequest(token){
 			return {
 				method: 'POST',
-				url: buildAuthRefreshTokenUri(base, token)
+				url: buildAuthRefreshTokenUri(baseAuthUri, token)
 			}
 		}
 
@@ -114,12 +114,8 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 			return user;
 		}
 
-		service.refreshOrReturnUser = function(savedUser){
-
-			// need to make request with current User
-			// if it is good - continue on
-			// if not, then refresh token and resave user
-			// NB - also need ability to refresh on any request
+		service.openFirstStepUriInBrowser = function(){
+			window.open(service.firstStepUri(), '_system');
 		}
 
 		return service;
