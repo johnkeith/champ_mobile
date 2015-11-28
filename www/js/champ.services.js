@@ -66,6 +66,14 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 			user = userObj;
 		}
 
+		function setOrClearUser(userObj){
+			if(userObj.access_token){
+				setUser(userObj);
+			} else {
+				setUser(undefined)
+			}
+		}
+
 		var baseAuthUri = 'http://localhost:9393/api/v1/fitbit/auth';
 		var firstStepCallbackUri = 'http://localhost:8100/%23/authenticated'
 		var clientSecret = 'V2UgYXJlIGdvaW5nIHRvIGhhdmUgYSBiYWJ5'
@@ -85,8 +93,8 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 			$http(req).then(function success(response){
 				var userObj = response.data.data;
 
-				setUser(userObj);
-				deferred.resolve(userObj);
+				setOrClearUser(userObj)
+				deferred.resolve(user);
 			}, function error(response){
 				deferred.reject(response.statusText || 'Error!!!');
 			});
@@ -101,8 +109,8 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 			$http(req).then(function success(response){
 				var userObj = response.data.data;
 
-				setUser(userObj);
-				deferred.resolve(userObj);
+				setOrClearUser(userObj)
+				deferred.resolve(user);
 			}, function error(response){
 				deferred.reject(response.statusText || 'Error!!!');
 			});
