@@ -45,11 +45,6 @@ angular.module('champ', [
                 return FitbitAuthService.secondStepRequest($stateParams.code);
               } else if(LifetimeStats.lifetime){
                 return savedUser;
-              // } else if(LifetimeStats.success == false && LifetimeStats.errors[0].errorType == 'invalid_grant' && savedUser.refresh_token){
-              //   return FitbitAuthService.refreshTokenRequest(savedUser.refresh_token)
-              // } else if(LifetimeStats.success == false && LifetimeStats.errors[0].errorType == 'invalid_token' && savedUser.refresh_token){
-              //   return FitbitAuthService.refreshTokenRequest(savedUser.refresh_token)
-              //   // FitbitAuthService.openFirstStepUriInBrowser();
               } else if(LifetimeStats.success == false && savedUser.refresh_token){
                 return FitbitAuthService.refreshTokenRequest(savedUser.refresh_token)
               } else {
