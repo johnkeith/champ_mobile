@@ -26,6 +26,16 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
+gulp.task('prepare_mobile', function(){
+  gulp.src([...files...], { base: './' })
+    .pipe(replace('http://localhost:8100/%23/authenticated', 'champ://'))
+});
+
+gulp.task('prepare_dev', function(){
+  gulp.src([...files...], { base: './' })
+    .pipe(replace('champ://', 'http://localhost:8100/%23/authenticated'))
+});
+
 gulp.task('watch', function() {
   gulp.watch(paths.sass, ['sass']);
 });
