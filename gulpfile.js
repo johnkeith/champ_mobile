@@ -7,6 +7,9 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 
+var replace = require('gulp-replace');
+var clean = require('gulp-clean');
+
 var paths = {
   sass: ['./scss/**/*.scss']
 };
@@ -26,14 +29,15 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
-gulp.task('prepare_mobile', function(){
-  gulp.src([...files...], { base: './' })
-    .pipe(replace('http://localhost:8100/%23/authenticated', 'champ://'))
+gulp.task('remove_ios_js', function () {
+  return gulp.src('./platforms/ios/www/js/champ.services.js', {read: false})
+    .pipe(clean());
 });
 
-gulp.task('prepare_dev', function(){
-  gulp.src([...files...], { base: './' })
-    .pipe(replace('champ://', 'http://localhost:8100/%23/authenticated'))
+gulp.task('prepare_ios', ['remove_ios_js'], function(){
+  gulp.src(['./www/js/champ.services.js'])
+    .pipe(replace('http://localhost:8100/%23/authenticated', 'champ://'))
+    .pipe(gulp.dest('./platforms/ios/www/js'));
 });
 
 gulp.task('watch', function() {
