@@ -75,7 +75,7 @@ services.factory('FitbitAuthService', ['$http', '$q', 'LocalStorage', 'FitbitDat
 		}
 
 		var baseAuthUri = 'http://localhost:9393/api/v1/fitbit/auth';
-		var firstStepCallbackUri = 'http://localhost:8100/%23/authenticated'
+		var firstStepCallbackUri = 'champ://'
 		var clientSecret = 'V2UgYXJlIGdvaW5nIHRvIGhhdmUgYSBiYWJ5'
 		
 		var user = LocalStorage.getObject('FitbitUser');

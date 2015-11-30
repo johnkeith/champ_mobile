@@ -7,7 +7,7 @@ angular.module('champ', [
   'ChampControllers',
 	'LocalStorageService'
 ])
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -15,6 +15,19 @@ angular.module('champ', [
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+
+    $ionicPlatform.on('resume', function(){
+      var urlFromCallback = window.localStorage.getItem('load_from_safari');
+
+      if(urlFromCallback){
+        var reg = /\?code=(.*)/
+        var code = reg.exec(urlFromCallback)[1];
+
+        window.localStorage.removeItem('load_from_safari');
+
+        $state.go('authenticated', { code: code });
+      }
+    });
   });
 })
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider',
@@ -58,3 +71,6 @@ angular.module('champ', [
   }
 ]);
 
+var handleOpenURL = function(url) {
+  window.localStorage.setItem('load_from_safari', url);
+};
